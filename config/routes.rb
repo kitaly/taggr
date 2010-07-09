@@ -1,5 +1,7 @@
 Taggr::Application.routes.draw do |map|
-  match 'train/' => 'classifier#train'
+  match 'train/', :to => 'classifier#train', :via => 'post', :as => 'train'
+  match 'train/', :to => 'classifier#create_train', :via => 'get'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

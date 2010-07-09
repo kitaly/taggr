@@ -8,6 +8,7 @@ class BayesianClassifier
   
   def train(tag, body)
     @guesser.train tag, body
+    @guesser.save
   end
   
 end
