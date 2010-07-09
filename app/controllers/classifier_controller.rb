@@ -17,7 +17,23 @@ class ClassifierController < ApplicationController
     
     respond_to do |response|
       response.html
-      response.xml { render :xml => @tags, status => :ok }
+      response.xml { render :xml => @tags, :status => :ok }
+    end
+  end
+  
+  def guess
+    classifier = BayesianClassifier.new  
+    @guesses = classifier.guess(params[:content])
+    
+    @guesses.each do |guess|
+      tag = Tag.find_by_name(guess[0])
+      tag.entries << (Entry.new :date => params[:date], :related_link => params[:related_link], :percentage => guess[1])
+      tag.save!
+    end
+    
+    respond_to do |response|
+      response.html
+      response.xml { render :xml => @guesses, :status => :ok } 
     end
   end
 end

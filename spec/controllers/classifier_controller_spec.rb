@@ -24,16 +24,51 @@ describe ClassifierController do
       it 'should associate the content with the tag based on bayesian classifier algorithm' do
         @classifier.should_receive(:train).once.with('tag1', 'some content to be trained here')
 
-        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :date => @current_date, :tags => 'tag1'
+        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :tags => 'tag1'
       end
       
       it 'should accept more than one tag' do
         @classifier.should_receive(:train).once.with('tag1', 'some content to be trained here')
         @classifier.should_receive(:train).once.with('tag2', 'some content to be trained here')
         
-        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :date => @current_date, :tags => 'tag1,tag2'        
+        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :tags => 'tag1,tag2'        
       end
       
+    end
+  end
+  
+  context 'when the classifier should tag a content' do
+    before(:each) do
+      @classifier = mock("BayesianClassifier")
+      BayesianClassifier.should_receive(:new).and_return(@classifier)        
+    end
+    
+    it 'should associate to the right tag' do
+      @classifier.should_receive(:guess).once.with('some content to be guessed').and_return([["tag1", 0.490674192302118]]);
+      post :guess, :content => 'some content to be guessed', :date => @current_date, :related_link => 'some-link'
+      
+      @tag1.reload
+      @tag1.entries.size.should == 1
+      @tag1.entries[0].date == @current_date
+      @tag1.entries[0].percentage == 0.490674192302118
+      @tag1.entries[0].related_link == 'some-link'
+    end
+    
+    it 'should associate with more than one tag if it is needed' do
+      @classifier.should_receive(:guess).once.with('some content to be guessed').and_return([["tag1", 0.490674192302118], ["tag2", 0.51]]);
+      post :guess, :content => 'some content to be guessed', :date => @current_date, :related_link => 'some-link'
+      
+      @tag1.reload
+      @tag1.entries.size.should == 1
+      @tag1.entries[0].date == @current_date
+      @tag1.entries[0].percentage == 0.490674192302118
+      @tag1.entries[0].related_link == 'some-link'
+      
+      @tag2.reload
+      @tag2.entries.size.should == 1
+      @tag2.entries[0].date == @current_date
+      @tag2.entries[0].percentage == 0.51
+      @tag2.entries[0].related_link == 'some-link'
     end
   end
 
