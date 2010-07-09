@@ -8,4 +8,5 @@
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
   inflect.irregular 'entry', 'entries'
+  inflect.irregular 'classifier', 'classifier'
  end
