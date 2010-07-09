@@ -11,4 +11,8 @@ class BayesianClassifier
     @guesser.save
   end
   
+  def guess(content)
+    @guesser.guess content
+  end
+  
 end
