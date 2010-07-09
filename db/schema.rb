@@ -9,7 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100709170151) do
+ActiveRecord::Schema.define(:version => 20100709173813) do
+
+  create_table "entries", :force => true do |t|
+    t.datetime "date",         :null => false
+    t.string   "related_link", :null => false
+    t.float    "percentage",   :null => false
+    t.integer  "tag_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tags", :force => true do |t|
     t.string   "name",       :limit => 100, :null => false
