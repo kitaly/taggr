@@ -16,4 +16,6 @@ describe Tag do
     tag.entries << (Entry.new :date => Date.current, :related_link => 'some-link', :percentage => 80.51)
     tag.entries.size.should == 1
   end
+  
+  pending 'should create a report based on initial date, end date and min percentage'
 end
