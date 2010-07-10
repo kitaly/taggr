@@ -6,7 +6,7 @@ class Tag < ActiveRecord::Base
     Tag.all(
       :select => 'name, count(entries.id) as total',    
       :joins => :entries,
-      :conditions => ["entries.date between ? and ? and entries.percentage >= ?", initial_date, end_date, min_percentage],
+      :conditions => ["entries.date between ? and ? and entries.percentage >= ?", initial_date, end_date, min_percentage.to_f/100],
       :group => 'name'
       )
   end

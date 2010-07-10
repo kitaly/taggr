@@ -1,0 +1,11 @@
+<form action="<%= guess_url %>" method="post">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+	<label for="content">Content:</label>
+	<textarea name="content"></textarea>
+	<label for="date">Date:</label>
+	<input type="text" name="date" />
+	<label for="related_link">Related Link:</label>
+	<input type="text" name="related_link" />
+	
+	<input type="submit" value="Guess!" />
+</form>
