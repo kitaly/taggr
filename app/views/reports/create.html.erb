@@ -1,65 +1,15 @@
-<%
-data = ''
-for tag in @tags
-	data = data + "['#{tag.name}', #{tag.total}],"
-end
-%>
 <script type="text/javascript">
-var chart;
-
-$(function() {
-var chart = new Highcharts.Chart({
-   chart: {
-      renderTo: 'container',
-      margin: [50, 200, 60, 170]
-   },
-   title: {
-      text: 'Tags Report'
-   },
-   plotArea: {
-      shadow: null,
-      borderWidth: null,
-      backgroundColor: null
-   },
-   tooltip: {
-      formatter: function() {
-         return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
-      }
-   },
-   plotOptions: {
-      pie: {
-         allowPointSelect: true,
-         dataLabels: {
-            enabled: true,
-            formatter: function() {
-               if (this.y > 5) return this.point.name;
-            },
-            color: 'white',
-            style: {
-               font: '13px Trebuchet MS, Verdana, sans-serif'
-            }
-         }
-      }
-   },
-   legend: {
-      layout: 'vertical',
-      style: {
-         left: 'auto',
-         bottom: 'auto',
-         right: '50px',
-         top: '100px'
-      }
-   },
-        series: [{
-      type: 'pie',
-      name: 'Tags',
-      data: [<%= data.chop %>]
-   }]
-});
-});
+	$(function(){
+		$('#report_submit').click(function() {
+			var form = $('#report_form');
+			location.href = form.attr('action') + '/' + $('#initial_date').val() + '/' + $('#end_date').val() + "/" + $('#percentage').val()
+		});
+	});
 </script>
-report
-<% for tag in @tags %>
-<%= tag.name %>
-<% end %>
-<div id="container"></div>
+
+<form method="get" action="<%= reports_url %>" id="report_form">
+	Initial Date: <input type="textbox" name="initial_date" id="initial_date">
+	End Date: <input type="textbox" name="end_date" id="end_date">
+	Min Percentage: <input type="textbox" name="percentage" id="percentage">
+	<input type="button" value="Generate report" id="report_submit" />
+</form>
