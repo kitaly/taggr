@@ -22,16 +22,16 @@ describe ClassifierController do
       end
       
       it 'should associate the content with the tag based on bayesian classifier algorithm' do
-        @classifier.should_receive(:train).once.with('tag1', 'some content to be trained here')
+        @classifier.should_receive(:train).once.with("#{@tag1.id}", 'some content to be trained here')
 
-        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :tags => 'tag1'
+        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :tags => "#{@tag1.id}"
       end
       
       it 'should accept more than one tag' do
-        @classifier.should_receive(:train).once.with('tag1', 'some content to be trained here')
-        @classifier.should_receive(:train).once.with('tag2', 'some content to be trained here')
+        @classifier.should_receive(:train).once.with("#{@tag1.id}", 'some content to be trained here')
+        @classifier.should_receive(:train).once.with("#{@tag2.id}", 'some content to be trained here')
         
-        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :tags => 'tag1,tag2'        
+        post :train, :content => 'some content to be trained here', :related_link => 'some-link', :tags => "#{@tag1.id},#{@tag2.id}"
       end
       
     end
@@ -44,7 +44,7 @@ describe ClassifierController do
     end
     
     it 'should associate to the right tag' do
-      @classifier.should_receive(:guess).once.with('some content to be guessed').and_return([["tag1", 0.490674192302118]]);
+      @classifier.should_receive(:guess).once.with('some content to be guessed').and_return([["#{@tag1.id}", 0.490674192302118]]);
       post :guess, :content => 'some content to be guessed', :date => @current_date, :related_link => 'some-link'
       
       @tag1.reload
@@ -55,7 +55,7 @@ describe ClassifierController do
     end
     
     it 'should associate with more than one tag if it is needed' do
-      @classifier.should_receive(:guess).once.with('some content to be guessed').and_return([["tag1", 0.490674192302118], ["tag2", 0.51]]);
+      @classifier.should_receive(:guess).once.with('some content to be guessed').and_return([["#{@tag1.id}", 0.490674192302118], ["#{@tag2.id}", 0.51]]);
       post :guess, :content => 'some content to be guessed', :date => @current_date, :related_link => 'some-link'
       
       @tag1.reload

@@ -26,7 +26,7 @@ class ClassifierController < ApplicationController
     @guesses = classifier.guess(params[:content])
     
     @guesses.each do |guess|
-      tag = Tag.find_by_name(guess[0])
+      tag = Tag.find(guess[0].to_i)
       tag.entries << (Entry.new :date => params[:date], :related_link => params[:related_link], :percentage => guess[1])
       tag.save!
     end

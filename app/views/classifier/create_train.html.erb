@@ -4,7 +4,7 @@
 	<textarea name="content"></textarea>
 	<label for="tag">Tag:</label>
 	<% for tag in @tags %>
-	<input type="checkbox" name="tags" value="<%= tag.name %>" /><%= tag.name %>
+	<input type="checkbox" name="tags" value="<%= tag.id %>" /><%= tag.name %>
 	<% end %>
 	
 	<input type="submit" value="Train!" />
