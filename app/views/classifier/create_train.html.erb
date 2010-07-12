@@ -1,11 +1,31 @@
 <form action="<%= train_url %>" method="post">
 	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
 	<label for="content">Content:</label>
-	<textarea name="content"></textarea>
+	<textarea name="content" id="content"></textarea>
 	<label for="tag">Tag:</label>
 	<% for tag in @tags %>
 	<input type="checkbox" name="tags" value="<%= tag.id %>" /><%= tag.name %>
 	<% end %>
 	
+	<input type="button" value="Try guess" id="try_guess" action="<%= try_guess_url %>" />
 	<input type="submit" value="Train!" />
 </form>
+
+<div id="try_guess_response">
+
+</div>
+
+<script type="text/javascript">
+	function guessed(data) {
+		var response = "";
+		$.each(data, function(i,n){
+			response += i + "=" + n + "%<br/>";
+		});
+		$('#try_guess_response').html(response);
+	}
+
+	$('#try_guess').click(function() {
+		var action = $(this).attr('action');
+		$.get(action, { content : $('#content').val() }, guessed); 
+	});
+</script>

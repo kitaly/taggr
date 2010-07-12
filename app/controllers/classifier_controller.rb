@@ -20,6 +20,22 @@ class ClassifierController < ApplicationController
       response.xml { render :xml => @tags, :status => :ok }
     end
   end
+
+  def try_guess
+    classifier = BayesianClassifier.new  
+    guesses = classifier.guess(params[:content])
+    
+    @result = Hash.new
+    
+    guesses.each do |guess|
+      tag = Tag.find(guess[0].to_i)
+      @result[tag.name.to_s] = guess[1]
+    end
+    
+    respond_to do |response|
+      response.json { render :json => @result, :status => :ok } 
+    end
+  end
   
   def create_guess
   end
@@ -43,4 +59,5 @@ class ClassifierController < ApplicationController
       response.xml { render :xml => @result, :status => :ok } 
     end
   end
+
 end
